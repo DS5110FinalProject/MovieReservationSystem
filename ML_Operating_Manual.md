@@ -21,12 +21,14 @@
    - The `user_input` should be in the following format:
      ```python
      user_input = {
-         'budget': 20000000,  # Budget of the movie
-         'imdb_score': 7.5,   # IMDB score of the movie
-         'directors': 'Steven Spielberg',  # Director(s) of the movie
-         'actors': ['Tom Hanks', 'Meryl Streep']  # List of actors in the movie
-         'genre': 'Action', # movie's genre
-     }
+        'Running time': 144,  
+        'budget': 50000000,
+        'Actors Box Office %': 50,  
+        'Director Box Office %': 69.23,  
+        'Oscar and Golden Globes nominations': 0,  
+        'Release year': 2016,  
+        'IMDb score': 7.4,
+    }
      ```
 
 5. **Call the `process_user_input(user_input, feature_columns, scaler)` function**
@@ -53,11 +55,13 @@ model, features, scaler = load_model_and_resources()
 
 # Step 2: Define user input
 user_input = {
-    'budget': 20000000,  
-    'imdb_score': 7.5,   
-    'directors': 'Steven Spielberg',  
-    'actors': ['Tom Hanks', 'Meryl Streep'],
-    'genre': 'Action',
+    'Running time': 144,  
+    'budget': 50000000,
+    'Actors Box Office %': 50,  
+    'Director Box Office %': 69.23,  
+    'Oscar and Golden Globes nominations': 0,  
+    'Release year': 2016,  
+    'IMDb score': 7.4,
 }
 
 # Step 3: Process user input
