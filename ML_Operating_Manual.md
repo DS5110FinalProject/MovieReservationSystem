@@ -1,15 +1,23 @@
 ### Steps to Call the Model
 
-1. **Import the `ML_Api`**
+1. **Import the necessary libraries**
+   ```python
+   import numpy as np
+   import pandas as pd
+   import pickle
+   from sklearn.preprocessing import StandardScaler
+   ```
+
+2. **Import the `ML_Api`**
    - First, you need to import the `ML_Api` file to access the necessary functions.
 
-2. **Call the `load_model_and_resources()` function**
+3. **Call the `load_model_and_resources()` function**
    - This function will return three objects: the trained model, feature columns, and the scaler. Example:
      ```python
      model, features, scaler = load_model_and_resources()
      ```
 
-3. **Prepare the user input**
+4. **Prepare the user input**
    - The `user_input` should be in the following format:
      ```python
      user_input = {
@@ -20,13 +28,13 @@
      }
      ```
 
-4. **Call the `process_user_input(user_input, feature_columns, scaler)` function**
+5. **Call the `process_user_input(user_input, feature_columns, scaler)` function**
    - This function processes the `user_input` and returns the standardized input data (`input_scaled`):
      ```python
      input_scaled = process_user_input(user_input, feature_columns, scaler)
      ```
 
-5. **Call the `predict_box_office(model, input_scaled)` function**
+6. **Call the `predict_box_office(model, input_scaled)` function**
    - This function takes the `model` and `input_scaled` as input and returns the predicted box office value as a float:
      ```python
      predicted_box_office = predict_box_office(model, input_scaled)
