@@ -25,6 +25,7 @@
          'imdb_score': 7.5,   # IMDB score of the movie
          'directors': 'Steven Spielberg',  # Director(s) of the movie
          'actors': ['Tom Hanks', 'Meryl Streep']  # List of actors in the movie
+         'genre': 'Action', # movie's genre
      }
      ```
 
@@ -55,7 +56,8 @@ user_input = {
     'budget': 20000000,  
     'imdb_score': 7.5,   
     'directors': 'Steven Spielberg',  
-    'actors': ['Tom Hanks', 'Meryl Streep']  
+    'actors': ['Tom Hanks', 'Meryl Streep'],
+    'genre': 'Action',
 }
 
 # Step 3: Process user input
