@@ -26,10 +26,10 @@ def signup():
     password = input("Enter a password: ")
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    role = input("Enter role (admin/regular): ").lower()
-    if role not in ["admin", "regular"]:
-        print("Invalid role. Defaulting to 'regular'.")
-        role = "regular"
+    role = input("Enter role (admin/user): ").lower()
+    if role not in ["admin", "user"]:
+        print("Invalid role. Defaulting to 'user'.")
+        role = "user"
 
     db.users.insert_one({
         "username": username,
