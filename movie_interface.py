@@ -339,6 +339,7 @@ def predict_movie_box_office():
     warnings.filterwarnings("ignore", message="DataFrame is highly fragmented")
 
     # Load model, feature columns, and scaler
+    print("Loading model resources...")
     try:
         model, features, scaler = load_model_and_resources()
     except Exception as e:
@@ -358,29 +359,41 @@ def predict_movie_box_office():
             print("Movie not found in the database.")
             return
 
+        # Get performance data from movie_performance collection
+        performance = db.movie_performance.find_one({"movie_id": movie["_id"]})
+        if not performance:
+            print("Performance data for this movie is not available.")
+            return
+
         # Create the user input dictionary from the database data
         user_input = {
+            'Running time': movie.get("running_time", 0),  # Default to 0 if not available
             'budget': movie.get("budget", 0),
-            'imdb_score': movie.get("imdb_score", 0),
-            'directors': movie.get("director", "Unknown"),
-            'actors': movie.get("actors", []),
-            'genre': movie.get("genre", "Unknown"),
+            'Actors Box Office %': performance.get("actor_boxoffice_%", 0),
+            'Director Box Office %': performance.get("director_boxoffice_%", 0),
+            'Oscar and Golden Globes nominations': performance.get("oscars_and_golden_globes_nominations", 0),
+            'Release year': movie.get("release_year", 0),
+            'IMDb score': movie.get("imdb_score", 0),
         }
     elif choice == "2":
         # Enter a new movie manually
         try:
-            budget = int(input("Enter the movie's budget (e.g., 20000000): "))
-            imdb_score = float(input("Enter the movie's IMDB score (e.g., 7.5): "))
-            directors = input("Enter the movie's director(s) (e.g., Christopher Nolan): ")
-            actors = input("Enter the movie's actors (comma-separated, e.g., Tom Hanks, Meryl Streep): ").split(',')
-            genre = input("Enter the movie's genre (e.g., Action): ")
+            running_time = int(input("Enter the movie's running time (in minutes): "))
+            budget = int(input("Enter the movie's budget (e.g., 50000000): "))
+            actors_boxoffice = float(input("Enter Actors Box Office % (e.g., 50): "))
+            directors_boxoffice = float(input("Enter Director Box Office % (e.g., 69.23): "))
+            oscar_nominations = int(input("Enter Oscar and Golden Globes nominations (e.g., 0): "))
+            release_year = int(input("Enter the movie's release year (e.g., 2016): "))
+            imdb_score = float(input("Enter the movie's IMDb score (e.g., 7.4): "))
 
             user_input = {
+                'Running time': running_time,
                 'budget': budget,
-                'imdb_score': imdb_score,
-                'directors': directors,
-                'actors': [actor.strip() for actor in actors],
-                'genre': genre,
+                'Actors Box Office %': actors_boxoffice,
+                'Director Box Office %': directors_boxoffice,
+                'Oscar and Golden Globes nominations': oscar_nominations,
+                'Release year': release_year,
+                'IMDb score': imdb_score,
             }
         except ValueError as ve:
             print(f"Invalid input: {ve}")
@@ -404,6 +417,7 @@ def predict_movie_box_office():
         print(f"\nPredicted Box Office Revenue: ${predicted_box_office:,.2f}")
     except Exception as e:
         print(f"Error predicting box office: {e}")
+
 
 
 def menu():
