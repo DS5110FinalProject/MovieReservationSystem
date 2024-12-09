@@ -18,11 +18,14 @@ def signup():
     """Signup a new user."""
     print("\n--- Signup ---")
     username = input("Enter a username: ")
+
+    # Check if the username already exists
     existing_user = db.users.find_one({"username": username})
     if existing_user:
         print("Username already exists. Please choose a different username.")
         return None
-
+    
+    # Get password and hash it
     password = input("Enter a password: ")
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
@@ -31,6 +34,7 @@ def signup():
         print("Invalid role. Defaulting to 'user'.")
         role = "user"
 
+    # Save the new user to the database
     db.users.insert_one({
         "username": username,
         "password": hashed_password,
@@ -42,9 +46,12 @@ def signup():
 def login():
     """Login an existing user."""
     print("\n--- Login ---")
+
+    # Get username and password from user
     username = input("Enter your username: ")
     password = input("Enter your password: ")
 
+    # Find the user in the database
     user = db.users.find_one({"username": username})
     if not user or not bcrypt.checkpw(password.encode('utf-8'), user["password"]):
         print("Invalid username or password. Please try again.")
@@ -69,6 +76,7 @@ def list_movies():
     max_year = input("Enter maximum release year (or press Enter to skip): ")
     min_score = input("Enter minimum IMDB score (or press Enter to skip): ")
 
+    # Build the query based on filters
     query = {}
     if genre:
         query["genre"] = {"$regex": f"^{genre}$", "$options": "i"}
@@ -191,8 +199,11 @@ def search_movies():
 
 def show_active_users():
     """Display active users."""
+
+    # Find users with a recent login date 
     users = db.users.find({"last_login": {"$gte": "2024-11-01"}}).sort("last_login", -1)
     
+    # Display user details
     print("\nActive Users:")
     print(f"{'Username':<15} {'Last Login':<20} {'Language':<10}")
     print("-" * 50)
@@ -202,11 +213,14 @@ def show_active_users():
 
 def show_feature_usage():
     """Display most used features."""
+
+    # Aggregate feature usage counts
     features = db.feature_usage.aggregate([
         { "$group": { "_id": "$feature_name", "usage_count": { "$sum": 1 } } },
         { "$sort": { "usage_count": -1 } }
     ])
     
+    # Display feature usage
     print("\nMost Used Features:")
     print(f"{'Feature Name':<20} {'Usage Count':<10}")
     print("-" * 30)
@@ -215,6 +229,8 @@ def show_feature_usage():
 
 def user_analytics():
     """View active users and feature usage."""
+
+    # Allow the user to choose between viewing active users or feature usage
     print("\n1. View active users")
     print("2. View most used features")
     choice = input("Choose an option: ")
@@ -228,6 +244,7 @@ def user_analytics():
 
 def add_movie():
     """Add a new movie."""
+    # Collect movie details from the user
     title = input("Title: ")
     director = input("Director: ")
     genre = input("Genre: ")
@@ -266,12 +283,15 @@ def add_movie():
 
 def update_movie():
     """Update a movie's details."""
+
+    # Prompt user for the movie title
     title = input("Enter the title of the movie to update: ")
     movie = db.movie.find_one({"title": {"$regex": f"^{title}$", "$options": "i"}})
     if not movie:
         print("Movie not found.")
         return
 
+    # Allow user to update each field or keep the existing value
     print("Leave fields blank to keep current values.")
     new_title = input(f"New title ({movie['title']}): ") or movie['title']
     new_director = input(f"New director ({movie['director']}): ") or movie['director']
@@ -322,6 +342,8 @@ def update_movie():
 
 def delete_movie():
     """Delete a movie by title."""
+
+    # Prompt the user for the title of the movie to delete
     title = input("Enter the title of the movie to delete: ")
     result = db.movie.delete_one({"title": title})
     if result.deleted_count > 0:
@@ -445,6 +467,7 @@ def menu():
 def main_menu(user):
     """CLI menu for logged-in users."""
     while True:
+        # Display menu options
         print("\n--- Main Menu ---")
         print("1. Filter movies")
         print("2. Search movies")
@@ -460,7 +483,8 @@ def main_menu(user):
         print("8. Logout")
         
         choice = input("Choose an option: ")
-
+        
+        # Handle user input
         if choice == "1":
             list_movies()
         elif choice == "2":
