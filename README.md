@@ -4,6 +4,10 @@
 
 This project involves creating a movie box office prediction system that leverages data on movies, their performances, and user interactions with the system's features. The system uses MongoDB as the database to store and manage data related to movies, their box office performance, users, and feature usage.
 
+## Running the Appliction
+
+python movie_interface.py
+
 ## Database Design
 
 The system's database is structured to handle data from various aspects of the movie industry, including movie details, box office performance, user interactions, and feature usage. This is done using a MongoDB database with several collections to store the necessary data.
